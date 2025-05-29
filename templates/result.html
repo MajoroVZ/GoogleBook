@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Дополнительные стили для уменьшения карточек */
+        .small-card {
+            max-width: 240px; /* Ограничиваем максимальную ширину карточки */
+            margin: 0 auto; /* Центрируем карточку */
+        }
+        .small-card .card-img-top {
+            max-height: 150px; /* Уменьшаем высоту изображения */
+            width: auto; /* Сохраняем пропорции */
+            margin: 0 auto; /* Центрируем изображение */
+            padding-top: 10px;
+        }
+        .small-card .card-body {
+            padding: 0.75rem; /* Уменьшаем внутренние отступы */
+        }
+        .small-card .card-title {
+            font-size: 0.9rem; /* Уменьшаем размер заголовка */
+            margin-bottom: 0.5rem;
+        }
+        .small-card .card-text {
+            font-size: 0.8rem; /* Уменьшаем размер текста */
+            margin-bottom: 0.5rem;
+        }
+        .small-card .btn {
+            padding: 0.25rem 0.5rem; /* Уменьшаем кнопку */
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3"> <!-- Уменьшил отступ сверху -->
+        <h1 class="h4">Search Results for "{{ book_title }}"</h1> <!-- Уменьшил заголовок -->
+        <a href="/" class="btn btn-secondary btn-sm mb-3">Back to Search</a> <!-- Уменьшил кнопку -->
+
+        <div class="row g-2"> <!-- Уменьшил промежутки между карточками -->
+            {% for book in books %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3"> <!-- Изменил сетку для лучшего отображения -->
+                <div class="card h-100 small-card"> <!-- Добавил класс small-card и h-100 -->
+                    {% if book.large_thumbnail %}
+                    <img src="{{ book.large_thumbnail }}" class="card-img-top img-fluid" alt="Book cover">
+                    {% elif book.thumbnail %}
+                    <img src="{{ book.thumbnail }}" class="card-img-top img-fluid" alt="Book cover">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column"> <!-- Добавил flexbox для лучшего расположения -->
+                        <h5 class="card-title">{{ book.title|truncate(50) }}</h5> <!-- Добавил обрезку длинных названий -->
+                        <div class="card-text small"> <!-- Добавил класс small -->
+                            {% if book.authors %}
+                            <div><strong>Auth:</strong> {{ ", ".join(book.authors)|truncate(30) }}</div> <!-- Сократил labels -->
+                            {% endif %}
+                            {% if book.publisher %}
+                            <div><strong>Pub:</strong> {{ book.publisher|truncate(20) }}</div>
+                            {% endif %}
+                            {% if book.published_date %}
+                            <div><strong>Year:</strong> {{ book.published_date }}</div>
+                            {% endif %}
+                        </div>
+                        {% if book.preview_link %}
+                        <a href="{{ book.preview_link }}" class="btn btn-primary btn-sm mt-auto" target="_blank">Preview</a> <!-- Кнопка прижата к низу -->
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
